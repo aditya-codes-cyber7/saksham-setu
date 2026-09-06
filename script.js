@@ -1,651 +1,388 @@
-/* =========================================
+/* =========================================================
    SAKSHAMSETU - MAIN JAVASCRIPT
-   Interactive Frontend Functionality
-========================================= */
+   Smart Learning Platform
+========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* =========================================
+    /* =====================================================
        ELEMENTS
-    ========================================= */
+    ===================================================== */
 
-    const navbar = document.querySelector(".navbar");
-    const navLinks = document.querySelectorAll("a[href^='#']");
+    const loader = document.getElementById("loader");
+    const loginScreen = document.getElementById("loginScreen");
+    const app = document.getElementById("app");
 
-    /* =========================================
-       USER DATA
-    ========================================= */
+    const loginForm = document.getElementById("loginForm");
+    const demoLogin = document.getElementById("demoLogin");
+    const togglePassword = document.getElementById("togglePassword");
 
-    let userData = JSON.parse(localStorage.getItem("sakshamsetuUser")) || {
-        name: "",
-        role: "",
-        enrolledCourses: [],
-        progress: 0
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    const roleButtons = document.querySelectorAll(".role-btn");
+    const navItems = document.querySelectorAll(".nav-item");
+    const pages = document.querySelectorAll(".page");
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    const menuToggle = document.getElementById("menuToggle");
+
+    const toast = document.getElementById("toast");
+    const toastMessage = document.getElementById("toastMessage");
+    const toastIcon = document.getElementById("toastIcon");
+
+    const modal = document.getElementById("courseModal");
+    const modalBody = document.getElementById("modalBody");
+    const closeModal = document.getElementById("closeModal");
+
+    let selectedRole = "learner";
+
+
+    /* =====================================================
+       APPLICATION DATA
+    ===================================================== */
+
+    const appData = {
+
+        courses: [
+
+            {
+                id: 1,
+                title: "Data Analysis Fundamentals",
+                category: "Data",
+                instructor: "Sarah Johnson",
+                progress: 65,
+                duration: "8 Weeks",
+                lessons: 24,
+                status: "in-progress",
+                icon: "📊",
+                color: "blue"
+            },
+
+            {
+                id: 2,
+                title: "Leadership Essentials",
+                category: "Leadership",
+                instructor: "Michael Brown",
+                progress: 40,
+                duration: "6 Weeks",
+                lessons: 18,
+                status: "in-progress",
+                icon: "🚀",
+                color: "purple"
+            },
+
+            {
+                id: 3,
+                title: "Digital Marketing Strategy",
+                category: "Business",
+                instructor: "Emma Wilson",
+                progress: 25,
+                duration: "5 Weeks",
+                lessons: 20,
+                status: "in-progress",
+                icon: "📱",
+                color: "orange"
+            },
+
+            {
+                id: 4,
+                title: "Project Management Basics",
+                category: "Business",
+                instructor: "David Miller",
+                progress: 100,
+                duration: "4 Weeks",
+                lessons: 16,
+                status: "completed",
+                icon: "📋",
+                color: "green"
+            },
+
+            {
+                id: 5,
+                title: "Introduction to Python",
+                category: "Technology",
+                instructor: "Alex Carter",
+                progress: 0,
+                duration: "10 Weeks",
+                lessons: 30,
+                status: "available",
+                icon: "💻",
+                color: "blue"
+            },
+
+            {
+                id: 6,
+                title: "Communication Skills",
+                category: "Leadership",
+                instructor: "Sophia Lee",
+                progress: 0,
+                duration: "3 Weeks",
+                lessons: 12,
+                status: "available",
+                icon: "💬",
+                color: "purple"
+            }
+
+        ],
+
+
+        skills: [
+
+            {
+                name: "Data Analysis",
+                score: 68,
+                target: 85,
+                level: "Intermediate"
+            },
+
+            {
+                name: "Communication",
+                score: 82,
+                target: 85,
+                level: "Advanced"
+            },
+
+            {
+                name: "Leadership",
+                score: 55,
+                target: 80,
+                level: "Developing"
+            },
+
+            {
+                name: "Project Management",
+                score: 72,
+                target: 85,
+                level: "Intermediate"
+            },
+
+            {
+                name: "Problem Solving",
+                score: 78,
+                target: 90,
+                level: "Advanced"
+            },
+
+            {
+                name: "Technical Skills",
+                score: 64,
+                target: 85,
+                level: "Intermediate"
+            }
+
+        ],
+
+
+        resources: [
+
+            {
+                title: "Introduction to Artificial Intelligence",
+                category: "Technology",
+                type: "Article",
+                icon: "🤖",
+                description: "Understand the fundamentals of AI and modern technologies."
+            },
+
+            {
+                title: "Data Visualization Best Practices",
+                category: "Data",
+                type: "Guide",
+                icon: "📊",
+                description: "Learn how to turn complex data into meaningful insights."
+            },
+
+            {
+                title: "Effective Team Leadership",
+                category: "Leadership",
+                type: "Video",
+                icon: "👥",
+                description: "Develop skills to lead and motivate successful teams."
+            },
+
+            {
+                title: "Business Strategy Fundamentals",
+                category: "Business",
+                type: "Article",
+                icon: "📈",
+                description: "Learn strategic thinking for business growth."
+            },
+
+            {
+                title: "SQL for Data Analytics",
+                category: "Data",
+                type: "Course",
+                icon: "🗄️",
+                description: "Master SQL fundamentals for data-driven decision making."
+            },
+
+            {
+                title: "Cloud Computing Basics",
+                category: "Technology",
+                type: "Guide",
+                icon: "☁️",
+                description: "Explore the foundations of modern cloud infrastructure."
+            }
+
+        ],
+
+
+        certificates: [
+
+            {
+                title: "Project Management Fundamentals",
+                date: "August 2026",
+                credential: "SS-PM-2026-8842",
+                icon: "🏆"
+            },
+
+            {
+                title: "Professional Communication",
+                date: "July 2026",
+                credential: "SS-COM-2026-2291",
+                icon: "🎓"
+            }
+
+        ]
+
     };
 
 
-    /* =========================================
-       TOAST NOTIFICATION
-    ========================================= */
+    /* =====================================================
+       USER DATA
+    ===================================================== */
+
+    let user = JSON.parse(
+        localStorage.getItem("sakshamSetuUser")
+    ) || {
+        name: "",
+        email: "",
+        role: "Learner"
+    };
+
+
+    /* =====================================================
+       LOADER
+    ===================================================== */
+
+    setTimeout(() => {
+
+        if (loader) {
+
+            loader.classList.add("hide");
+
+            setTimeout(() => {
+                loader.style.display = "none";
+            }, 600);
+
+        }
+
+
+        /* AUTO LOGIN IF USER EXISTS */
+
+        if (user.name) {
+
+            showApp();
+
+        }
+
+    }, 1800);
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
 
     function showToast(message, type = "success") {
 
-        const existingToast = document.querySelector(".toast");
+        if (!toast) return;
 
-        if (existingToast) {
-            existingToast.remove();
+        toastMessage.textContent = message;
+
+        if (type === "success") {
+            toastIcon.textContent = "✓";
         }
 
-        const toast = document.createElement("div");
+        if (type === "error") {
+            toastIcon.textContent = "!";
+        }
 
-        toast.className = `toast ${type}`;
+        if (type === "info") {
+            toastIcon.textContent = "i";
+        }
 
-        toast.innerHTML = `
-            <span>${type === "success" ? "✓" : "!"}</span>
-            <p>${message}</p>
-        `;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.add("show");
-        }, 100);
+        toast.classList.add("show");
 
         setTimeout(() => {
             toast.classList.remove("show");
-
-            setTimeout(() => {
-                toast.remove();
-            }, 400);
-
         }, 3000);
-    }
-
-
-    /* =========================================
-       SMOOTH SCROLL
-    ========================================= */
-
-    navLinks.forEach(link => {
-
-        link.addEventListener("click", function (e) {
-
-            const target = this.getAttribute("href");
-
-            if (target && target !== "#") {
-
-                const section = document.querySelector(target);
-
-                if (section) {
-
-                    e.preventDefault();
-
-                    section.scrollIntoView({
-                        behavior: "smooth"
-                    });
-
-                }
-            }
-
-        });
-
-    });
-
-
-    /* =========================================
-       NAVBAR SCROLL EFFECT
-    ========================================= */
-
-    window.addEventListener("scroll", () => {
-
-        if (!navbar) return;
-
-        if (window.scrollY > 50) {
-
-            navbar.classList.add("scrolled");
-
-        } else {
-
-            navbar.classList.remove("scrolled");
-
-        }
-
-    });
-
-
-    /* =========================================
-       CREATE MODAL
-    ========================================= */
-
-    function createModal(title, content) {
-
-        const oldModal = document.querySelector(".custom-modal");
-
-        if (oldModal) {
-            oldModal.remove();
-        }
-
-        const modal = document.createElement("div");
-
-        modal.className = "custom-modal";
-
-        modal.innerHTML = `
-
-            <div class="modal-overlay"></div>
-
-            <div class="modal-box">
-
-                <button class="close-modal">×</button>
-
-                <h2>${title}</h2>
-
-                <div class="modal-content">
-                    ${content}
-                </div>
-
-            </div>
-
-        `;
-
-        document.body.appendChild(modal);
-
-
-        setTimeout(() => {
-            modal.classList.add("active");
-        }, 50);
-
-
-        const close = () => {
-
-            modal.classList.remove("active");
-
-            setTimeout(() => {
-                modal.remove();
-            }, 300);
-
-        };
-
-
-        modal.querySelector(".close-modal")
-            .addEventListener("click", close);
-
-
-        modal.querySelector(".modal-overlay")
-            .addEventListener("click", close);
 
     }
 
 
-    /* =========================================
+    /* =====================================================
        ROLE SELECTION
-    ========================================= */
+    ===================================================== */
 
-    window.selectRole = function (role) {
+    roleButtons.forEach(button => {
 
-        userData.role = role;
+        button.addEventListener("click", () => {
 
-        localStorage.setItem(
-            "sakshamsetuUser",
-            JSON.stringify(userData)
-        );
-
-        createModal(
-            `Welcome ${role}! 👋`,
-            `
-
-            <p class="modal-description">
-                Join SakshamSetu and unlock your learning journey.
-            </p>
-
-            <form id="registerForm">
-
-                <input
-                    type="text"
-                    id="userName"
-                    placeholder="Enter your name"
-                    required
-                >
-
-                <input
-                    type="email"
-                    id="userEmail"
-                    placeholder="Enter your email"
-                    required
-                >
-
-                <button type="submit" class="modal-btn">
-                    Continue
-                </button>
-
-            </form>
-
-            `
-        );
-
-
-        const form = document.querySelector("#registerForm");
-
-        if (form) {
-
-            form.addEventListener("submit", (e) => {
-
-                e.preventDefault();
-
-                const name =
-                    document.querySelector("#userName").value;
-
-                userData.name = name;
-
-                localStorage.setItem(
-                    "sakshamsetuUser",
-                    JSON.stringify(userData)
-                );
-
-                document
-                    .querySelector(".custom-modal")
-                    .remove();
-
-                showToast(
-                    `Welcome to SakshamSetu, ${name}! 🚀`
-                );
-
-                updateUserInterface();
-
+            roleButtons.forEach(btn => {
+                btn.classList.remove("active");
             });
 
-        }
+            button.classList.add("active");
 
-    };
-
-
-    /* =========================================
-       UPDATE USER INTERFACE
-    ========================================= */
-
-    function updateUserInterface() {
-
-        if (!userData.name) return;
-
-        const loginButtons =
-            document.querySelectorAll(
-                ".login-btn, .btn-login"
-            );
-
-        loginButtons.forEach(button => {
-
-            button.textContent =
-                userData.name.split(" ")[0];
+            selectedRole = button.dataset.role;
 
         });
-
-    }
-
-
-    updateUserInterface();
-
-
-    /* =========================================
-       LOGIN BUTTON
-    ========================================= */
-
-    document.addEventListener("click", (e) => {
-
-        if (
-            e.target.classList.contains("login-btn") ||
-            e.target.classList.contains("btn-login")
-        ) {
-
-            createModal(
-                "Login to SakshamSetu",
-                `
-
-                <form id="loginForm">
-
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        required
-                    >
-
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        required
-                    >
-
-                    <button
-                        type="submit"
-                        class="modal-btn"
-                    >
-                        Login
-                    </button>
-
-                </form>
-
-                `
-            );
-
-
-            const loginForm =
-                document.querySelector("#loginForm");
-
-            if (loginForm) {
-
-                loginForm.addEventListener(
-                    "submit",
-                    (event) => {
-
-                        event.preventDefault();
-
-                        showToast(
-                            "Login successful! 🎉"
-                        );
-
-                        setTimeout(() => {
-
-                            const modal =
-                                document.querySelector(
-                                    ".custom-modal"
-                                );
-
-                            if (modal) modal.remove();
-
-                        }, 500);
-
-                    }
-                );
-
-            }
-
-        }
 
     });
 
 
-    /* =========================================
-       COURSE ENROLLMENT
-    ========================================= */
+    /* =====================================================
+       PASSWORD TOGGLE
+    ===================================================== */
 
-    document.addEventListener("click", (e) => {
+    if (togglePassword) {
 
-        if (
-            e.target.classList.contains("enroll-btn")
-        ) {
+        togglePassword.addEventListener("click", () => {
 
-            const course =
-                e.target
-                    .closest(".course-card")
-                    ?.querySelector("h3")
-                    ?.innerText
-                    || "Course";
+            if (passwordInput.type === "password") {
 
-
-            if (
-                !userData.enrolledCourses.includes(course)
-            ) {
-
-                userData.enrolledCourses.push(course);
-
-                localStorage.setItem(
-                    "sakshamsetuUser",
-                    JSON.stringify(userData)
-                );
-
-                e.target.innerText = "Enrolled ✓";
-
-                e.target.disabled = true;
-
-                showToast(
-                    `Successfully enrolled in ${course}`
-                );
+                passwordInput.type = "text";
+                togglePassword.textContent = "🙈";
 
             } else {
 
-                showToast(
-                    "You are already enrolled!",
-                    "info"
-                );
+                passwordInput.type = "password";
+                togglePassword.textContent = "👁";
 
             }
 
-        }
-
-    });
-
-
-    /* =========================================
-       LEARNING PROGRESS
-    ========================================= */
-
-    window.updateProgress = function (value) {
-
-        userData.progress = value;
-
-        localStorage.setItem(
-            "sakshamsetuUser",
-            JSON.stringify(userData)
-        );
-
-        const progressBar =
-            document.querySelector(".progress-fill");
-
-        if (progressBar) {
-
-            progressBar.style.width = `${value}%`;
-
-        }
-
-        const progressText =
-            document.querySelector(".progress-text");
-
-        if (progressText) {
-
-            progressText.innerText =
-                `${value}% Completed`;
-
-        }
-
-    };
-
-
-    /* =========================================
-       QUIZ SYSTEM
-    ========================================= */
-
-    window.startQuiz = function () {
-
-        createModal(
-            "Skill Assessment 🧠",
-            `
-
-            <div class="quiz-box">
-
-                <div class="quiz-progress">
-                    Question 1 of 3
-                </div>
-
-                <h3>
-                    Which technology is primarily used
-                    for web page structure?
-                </h3>
-
-                <div class="quiz-options">
-
-                    <button class="quiz-option" data-answer="false">
-                        CSS
-                    </button>
-
-                    <button class="quiz-option" data-answer="true">
-                        HTML
-                    </button>
-
-                    <button class="quiz-option" data-answer="false">
-                        Python
-                    </button>
-
-                    <button class="quiz-option" data-answer="false">
-                        SQL
-                    </button>
-
-                </div>
-
-            </div>
-
-            `
-        );
-
-
-        const options =
-            document.querySelectorAll(".quiz-option");
-
-
-        options.forEach(option => {
-
-            option.addEventListener("click", () => {
-
-                const correct =
-                    option.dataset.answer === "true";
-
-
-                if (correct) {
-
-                    option.classList.add("correct");
-
-                    showToast(
-                        "Correct Answer! 🎉"
-                    );
-
-                    setTimeout(() => {
-
-                        const modal =
-                            document.querySelector(
-                                ".custom-modal"
-                            );
-
-                        if (modal) modal.remove();
-
-                        updateProgress(
-                            Math.min(
-                                userData.progress + 10,
-                                100
-                            )
-                        );
-
-                    }, 1200);
-
-                } else {
-
-                    option.classList.add("wrong");
-
-                    showToast(
-                        "Try again!",
-                        "error"
-                    );
-
-                }
-
-            });
-
         });
 
-    };
+    }
 
 
-    /* =========================================
-       SEARCH FUNCTION
-    ========================================= */
+    /* =====================================================
+       LOGIN
+    ===================================================== */
 
-    const searchInputs =
-        document.querySelectorAll(
-            "input[type='search'], .search-input"
-        );
+    if (loginForm) {
 
+        loginForm.addEventListener("submit", (event) => {
 
-    searchInputs.forEach(input => {
+            event.preventDefault();
 
-        input.addEventListener("input", () => {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
 
-            const query =
-                input.value.toLowerCase();
-
-            const cards =
-                document.querySelectorAll(
-                    ".course-card"
-                );
-
-            cards.forEach(card => {
-
-                const text =
-                    card.innerText.toLowerCase();
-
-                if (text.includes(query)) {
-
-                    card.style.display = "block";
-
-                } else {
-
-                    card.style.display = "none";
-
-                }
-
-            });
-
-        });
-
-    });
-
-
-    /* =========================================
-       FEEDBACK SYSTEM
-    ========================================= */
-
-    document.addEventListener("submit", (e) => {
-
-        if (
-            e.target.classList.contains(
-                "feedback-form"
-            )
-        ) {
-
-            e.preventDefault();
-
-            const textarea =
-                e.target.querySelector("textarea");
-
-            if (
-                textarea &&
-                textarea.value.trim() !== ""
-            ) {
+            if (!email || !password) {
 
                 showToast(
-                    "Thank you for your feedback! 💙"
-                );
-
-                textarea.value = "";
-
-            }
-
-        }
-
-    });
-
-
-    /* =========================================
-       DASHBOARD BUTTONS
-    ========================================= */
-
-    document.addEventListener("click", (e) => {
-
-        if (
-            e.target.classList.contains(
-                "dashboard-btn"
-            )
-        ) {
-
-            if (!userData.name) {
-
-                showToast(
-                    "Please login first!",
+                    "Please enter email and password",
                     "error"
                 );
 
@@ -654,165 +391,1264 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            createModal(
-                "My Learning Dashboard",
-                `
+            const nameFromEmail =
+                email
+                    .split("@")[0]
+                    .replace(/[._-]/g, " ")
+                    .replace(/\b\w/g, char =>
+                        char.toUpperCase()
+                    );
 
-                <div class="dashboard-modal">
 
-                    <div class="dash-profile">
+            user = {
 
-                        <div class="avatar">
-                            ${userData.name
-                                .charAt(0)
-                                .toUpperCase()}
-                        </div>
+                name: nameFromEmail || "Aditya",
+                email: email,
+                role:
+                    selectedRole.charAt(0).toUpperCase() +
+                    selectedRole.slice(1)
 
-                        <div>
+            };
 
-                            <h3>${userData.name}</h3>
 
-                            <p>
-                                ${userData.role || "Learner"}
-                            </p>
+            localStorage.setItem(
+                "sakshamSetuUser",
+                JSON.stringify(user)
+            );
 
-                        </div>
+
+            showToast(
+                `Welcome back, ${user.name}! 🚀`
+            );
+
+
+            setTimeout(() => {
+
+                showApp();
+
+            }, 700);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       DEMO LOGIN
+    ===================================================== */
+
+    if (demoLogin) {
+
+        demoLogin.addEventListener("click", () => {
+
+            user = {
+
+                name: "Aditya",
+                email: "aditya@example.com",
+                role: "Learner"
+
+            };
+
+
+            localStorage.setItem(
+                "sakshamSetuUser",
+                JSON.stringify(user)
+            );
+
+
+            showToast(
+                "Demo mode activated! 🚀"
+            );
+
+
+            setTimeout(() => {
+
+                showApp();
+
+            }, 600);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       SHOW APPLICATION
+    ===================================================== */
+
+    function showApp() {
+
+        if (loginScreen) {
+
+            loginScreen.classList.add("login-hide");
+
+            setTimeout(() => {
+                loginScreen.style.display = "none";
+            }, 500);
+
+        }
+
+
+        if (app) {
+
+            app.classList.remove("hidden");
+
+            setTimeout(() => {
+                app.classList.add("app-visible");
+            }, 50);
+
+        }
+
+
+        updateUserInterface();
+
+        renderDashboard();
+
+        renderLearningCourses();
+
+        renderCompetency();
+
+        renderResources();
+
+        renderCertificates();
+
+    }
+
+
+    /* =====================================================
+       USER INTERFACE
+    ===================================================== */
+
+    function updateUserInterface() {
+
+        const firstLetter =
+            user.name ?
+            user.name.charAt(0).toUpperCase() :
+            "A";
+
+
+        const elements = {
+
+            sidebarName:
+                document.getElementById("sidebarName"),
+
+            sidebarRole:
+                document.getElementById("sidebarRole"),
+
+            sidebarAvatar:
+                document.getElementById("sidebarAvatar"),
+
+            topName:
+                document.getElementById("topName"),
+
+            topAvatar:
+                document.getElementById("topAvatar"),
+
+            welcomeName:
+                document.getElementById("welcomeName"),
+
+            settingsName:
+                document.getElementById("settingsName"),
+
+            settingsEmail:
+                document.getElementById("settingsEmail"),
+
+            settingsAvatar:
+                document.getElementById("settingsAvatar")
+
+        };
+
+
+        if (elements.sidebarName)
+            elements.sidebarName.textContent =
+                user.name || "Aditya";
+
+        if (elements.sidebarRole)
+            elements.sidebarRole.textContent =
+                user.role || "Learner";
+
+        if (elements.sidebarAvatar)
+            elements.sidebarAvatar.textContent =
+                firstLetter;
+
+        if (elements.topName)
+            elements.topName.textContent =
+                user.name || "Aditya";
+
+        if (elements.topAvatar)
+            elements.topAvatar.textContent =
+                firstLetter;
+
+        if (elements.welcomeName)
+            elements.welcomeName.textContent =
+                user.name || "Aditya";
+
+        if (elements.settingsName)
+            elements.settingsName.value =
+                user.name || "Aditya";
+
+        if (elements.settingsEmail)
+            elements.settingsEmail.value =
+                user.email || "";
+
+        if (elements.settingsAvatar)
+            elements.settingsAvatar.textContent =
+                firstLetter;
+
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    navItems.forEach(item => {
+
+        item.addEventListener("click", () => {
+
+            const pageName = item.dataset.page;
+
+            navigateTo(pageName);
+
+        });
+
+    });
+
+
+    document.querySelectorAll("[data-go]").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            navigateTo(
+                button.dataset.go
+            );
+
+        });
+
+    });
+
+
+    function navigateTo(pageName) {
+
+        navItems.forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                item.dataset.page === pageName
+            );
+
+        });
+
+
+        pages.forEach(page => {
+
+            page.classList.toggle(
+                "active-page",
+                page.id === pageName
+            );
+
+        });
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+        if (window.innerWidth < 900) {
+
+            document
+                .querySelector(".sidebar")
+                ?.classList.remove("mobile-open");
+
+        }
+
+    }
+
+
+    /* =====================================================
+       DASHBOARD RENDER
+    ===================================================== */
+
+    function renderDashboard() {
+
+        renderDashboardCourses();
+
+        renderCompetencyPreview();
+
+        renderSkillGaps();
+
+        renderRecommendedCourses();
+
+    }
+
+
+    function renderDashboardCourses() {
+
+        const container =
+            document.getElementById("dashboardCourses");
+
+        if (!container) return;
+
+
+        const activeCourses =
+            appData.courses
+                .filter(course =>
+                    course.status === "in-progress"
+                )
+                .slice(0, 3);
+
+
+        container.innerHTML =
+            activeCourses.map(course => `
+
+            <div class="course-progress-item">
+
+                <div class="course-mini-icon">
+                    ${course.icon}
+                </div>
+
+                <div class="course-progress-info">
+
+                    <div class="course-progress-title">
+
+                        <strong>${course.title}</strong>
+
+                        <span>${course.progress}%</span>
 
                     </div>
 
+                    <div class="progress-track">
 
-                    <div class="dash-stats">
-
-                        <div>
-                            <strong>
-                                ${userData.enrolledCourses.length}
-                            </strong>
-
-                            <span>
-                                Courses
-                            </span>
-                        </div>
-
-
-                        <div>
-                            <strong>
-                                ${userData.progress}%
-                            </strong>
-
-                            <span>
-                                Progress
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div class="dash-progress">
-
-                        <p>Overall Progress</p>
-
-                        <div class="progress-bar">
-
-                            <div
-                                class="progress-fill"
-                                style="
-                                    width:${userData.progress}%
-                                "
-                            ></div>
-
-                        </div>
+                        <div
+                            class="progress-fill"
+                            style="
+                                width:${course.progress}%
+                            "
+                        ></div>
 
                     </div>
 
                 </div>
 
-                `
-            );
+                <button
+                    class="mini-continue"
+                    data-course="${course.id}"
+                >
+                    Continue
+                </button>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    function renderCompetencyPreview() {
+
+        const container =
+            document.getElementById("competencyPreview");
+
+        if (!container) return;
+
+
+        container.innerHTML =
+            appData.skills
+                .slice(0, 4)
+                .map(skill => `
+
+                <div class="competency-item">
+
+                    <div>
+
+                        <strong>${skill.name}</strong>
+
+                        <span>${skill.score}%</span>
+
+                    </div>
+
+                    <div class="progress-track">
+
+                        <div
+                            class="progress-fill skill-progress"
+                            style="
+                                width:${skill.score}%
+                            "
+                        ></div>
+
+                    </div>
+
+                </div>
+
+                `).join("");
+
+    }
+
+
+    function renderSkillGaps() {
+
+        const container =
+            document.getElementById("skillGapList");
+
+        if (!container) return;
+
+
+        const gaps =
+            appData.skills
+                .map(skill => ({
+                    ...skill,
+                    gap: skill.target - skill.score
+                }))
+                .sort((a, b) => b.gap - a.gap)
+                .slice(0, 3);
+
+
+        container.innerHTML =
+            gaps.map(skill => `
+
+            <div class="skill-gap-card">
+
+                <div class="gap-icon">
+                    🎯
+                </div>
+
+                <div>
+
+                    <h4>${skill.name}</h4>
+
+                    <p>
+                        Current: ${skill.score}%
+                        • Target: ${skill.target}%
+                    </p>
+
+                </div>
+
+                <div class="gap-score">
+
+                    ${skill.gap}%
+                    <span>Gap</span>
+
+                </div>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    function renderRecommendedCourses() {
+
+        const container =
+            document.getElementById("recommendedCourses");
+
+        if (!container) return;
+
+
+        const recommended =
+            appData.courses
+                .filter(course =>
+                    course.status === "available"
+                );
+
+
+        container.innerHTML =
+            recommended.map(course => `
+
+            <div class="recommended-card">
+
+                <div class="course-card-top">
+
+                    <div class="course-big-icon">
+                        ${course.icon}
+                    </div>
+
+                    <span class="course-category">
+                        ${course.category}
+                    </span>
+
+                </div>
+
+                <h3>${course.title}</h3>
+
+                <p>
+                    ${course.instructor}
+                </p>
+
+                <div class="course-meta">
+
+                    <span>⏱ ${course.duration}</span>
+
+                    <span>📚 ${course.lessons} lessons</span>
+
+                </div>
+
+                <button
+                    class="primary-btn enroll-course"
+                    data-course="${course.id}"
+                >
+                    Start Learning →
+                </button>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    /* =====================================================
+       LEARNING PAGE
+    ===================================================== */
+
+    function renderLearningCourses(filter = "all") {
+
+        const container =
+            document.getElementById("learningCourses");
+
+        if (!container) return;
+
+
+        let courses = [...appData.courses];
+
+
+        if (filter === "in-progress") {
+
+            courses =
+                courses.filter(course =>
+                    course.status === "in-progress"
+                );
 
         }
 
-    });
+
+        if (filter === "completed") {
+
+            courses =
+                courses.filter(course =>
+                    course.status === "completed"
+                );
+
+        }
 
 
-    /* =========================================
-       ANIMATE ELEMENTS ON SCROLL
-    ========================================= */
+        container.innerHTML =
+            courses.map(course => `
 
-    const observer =
-        new IntersectionObserver(
-            (entries) => {
+            <div class="learning-card">
 
-                entries.forEach(entry => {
+                <div class="learning-card-icon">
 
-                    if (entry.isIntersecting) {
+                    ${course.icon}
 
-                        entry.target.classList.add(
-                            "visible"
-                        );
+                </div>
 
-                    }
+                <div class="learning-card-content">
 
-                });
+                    <span class="course-category">
+                        ${course.category}
+                    </span>
 
-            },
-            {
-                threshold: 0.15
-            }
-        );
+                    <h3>
+                        ${course.title}
+                    </h3>
 
+                    <p>
+                        ${course.instructor}
+                    </p>
+
+                    <div class="progress-track">
+
+                        <div
+                            class="progress-fill"
+                            style="
+                                width:${course.progress}%
+                            "
+                        ></div>
+
+                    </div>
+
+                    <div class="learning-card-footer">
+
+                        <span>
+                            ${course.progress}% Complete
+                        </span>
+
+                        <button
+                            class="outline-btn open-course"
+                            data-course="${course.id}"
+                        >
+
+                            ${
+                                course.status === "completed"
+                                ? "View Certificate"
+                                : "Continue →"
+                            }
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    /* =====================================================
+       LEARNING FILTERS
+    ===================================================== */
 
     document
-        .querySelectorAll(
-            ".feature-card, .course-card, .role-card"
-        )
-        .forEach(element => {
+        .querySelectorAll(".learning-tab")
+        .forEach(tab => {
 
-            element.classList.add("reveal");
+            tab.addEventListener("click", () => {
 
-            observer.observe(element);
+                document
+                    .querySelectorAll(".learning-tab")
+                    .forEach(item =>
+                        item.classList.remove("active")
+                    );
+
+
+                tab.classList.add("active");
+
+
+                renderLearningCourses(
+                    tab.dataset.filter
+                );
+
+            });
 
         });
 
 
-    /* =========================================
-       KEYBOARD SHORTCUTS
-    ========================================= */
+    /* =====================================================
+       COMPETENCY PAGE
+    ===================================================== */
 
-    document.addEventListener("keydown", (e) => {
+    function renderCompetency() {
 
-        /* ESC CLOSE MODAL */
+        const container =
+            document.getElementById("skillsGrid");
 
-        if (e.key === "Escape") {
+        if (!container) return;
 
-            const modal =
-                document.querySelector(".custom-modal");
 
-            if (modal) {
+        container.innerHTML =
+            appData.skills.map(skill => `
 
-                modal.remove();
+            <div class="skill-card">
 
-            }
+                <div class="skill-card-header">
+
+                    <div>
+
+                        <h3>${skill.name}</h3>
+
+                        <span>${skill.level}</span>
+
+                    </div>
+
+                    <strong>
+                        ${skill.score}%
+                    </strong>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="
+                            width:${skill.score}%
+                        "
+                    ></div>
+
+                </div>
+
+                <div class="skill-target">
+
+                    Target:
+                    ${skill.target}%
+
+                </div>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    /* =====================================================
+       SKILL ANALYSIS
+    ===================================================== */
+
+    function runSkillAnalysis() {
+
+        const button =
+            document.getElementById("runAnalysis");
+
+        if (button) {
+
+            button.textContent =
+                "Analyzing...";
+
+            button.disabled = true;
 
         }
 
 
-        /* CTRL + K SEARCH */
+        setTimeout(() => {
 
-        if (
-            e.ctrlKey &&
-            e.key.toLowerCase() === "k"
-        ) {
+            appData.skills.forEach(skill => {
 
-            e.preventDefault();
+                const improvement =
+                    Math.floor(
+                        Math.random() * 5
+                    ) + 1;
 
-            const search =
-                document.querySelector(
-                    "input[type='search'], .search-input"
+                skill.score =
+                    Math.min(
+                        skill.score + improvement,
+                        100
+                    );
+
+            });
+
+
+            renderCompetency();
+
+            renderCompetencyPreview();
+
+            renderSkillGaps();
+
+
+            const average =
+                Math.round(
+
+                    appData.skills.reduce(
+                        (total, skill) =>
+                            total + skill.score,
+                        0
+                    )
+
+                    / appData.skills.length
+
                 );
 
-            if (search) {
 
-                search.focus();
+            document
+                .getElementById("overallScore")
+                .textContent =
+                `${average}%`;
+
+
+            document
+                .getElementById("ringScore")
+                .textContent =
+                average;
+
+
+            document
+                .getElementById("competencyScore")
+                .textContent =
+                `${average}%`;
+
+
+            if (button) {
+
+                button.textContent =
+                    "✦ Run Skill Analysis";
+
+                button.disabled = false;
+
+            }
+
+
+            showToast(
+                "Skill analysis completed successfully! 🎯"
+            );
+
+        }, 1500);
+
+    }
+
+
+    const runAnalysis =
+        document.getElementById("runAnalysis");
+
+    const analyzeSkills =
+        document.getElementById("analyzeSkills");
+
+
+    if (runAnalysis) {
+
+        runAnalysis.addEventListener(
+            "click",
+            runSkillAnalysis
+        );
+
+    }
+
+
+    if (analyzeSkills) {
+
+        analyzeSkills.addEventListener(
+            "click",
+            () => {
+
+                navigateTo("competency");
+
+                setTimeout(
+                    runSkillAnalysis,
+                    400
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       KNOWLEDGE HUB
+    ===================================================== */
+
+    function renderResources(
+        search = "",
+        category = "all"
+    ) {
+
+        const container =
+            document.getElementById("resourceGrid");
+
+        if (!container) return;
+
+
+        let resources =
+            [...appData.resources];
+
+
+        if (search) {
+
+            resources =
+                resources.filter(resource =>
+
+                    resource.title
+                        .toLowerCase()
+                        .includes(
+                            search.toLowerCase()
+                        )
+
+                    ||
+
+                    resource.description
+                        .toLowerCase()
+                        .includes(
+                            search.toLowerCase()
+                        )
+
+                );
+
+        }
+
+
+        if (category !== "all") {
+
+            resources =
+                resources.filter(resource =>
+                    resource.category === category
+                );
+
+        }
+
+
+        if (!resources.length) {
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div>🔍</div>
+
+                    <h3>No resources found</h3>
+
+                    <p>
+                        Try another search.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            resources.map(resource => `
+
+            <div class="resource-card">
+
+                <div class="resource-icon">
+
+                    ${resource.icon}
+
+                </div>
+
+                <span class="resource-type">
+
+                    ${resource.type}
+
+                </span>
+
+                <h3>
+                    ${resource.title}
+                </h3>
+
+                <p>
+                    ${resource.description}
+                </p>
+
+                <div class="resource-footer">
+
+                    <span>
+                        ${resource.category}
+                    </span>
+
+                    <button
+                        class="text-btn resource-open"
+                    >
+                        Explore →
+                    </button>
+
+                </div>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    const resourceSearch =
+        document.getElementById("resourceSearch");
+
+    const resourceCategory =
+        document.getElementById("resourceCategory");
+
+
+    function updateResourceFilters() {
+
+        renderResources(
+
+            resourceSearch ?
+            resourceSearch.value :
+            "",
+
+            resourceCategory ?
+            resourceCategory.value :
+            "all"
+
+        );
+
+    }
+
+
+    if (resourceSearch) {
+
+        resourceSearch.addEventListener(
+            "input",
+            updateResourceFilters
+        );
+
+    }
+
+
+    if (resourceCategory) {
+
+        resourceCategory.addEventListener(
+            "change",
+            updateResourceFilters
+        );
+
+    }
+
+
+    /* =====================================================
+       CERTIFICATES
+    ===================================================== */
+
+    function renderCertificates() {
+
+        const container =
+            document.getElementById("certificateGrid");
+
+        if (!container) return;
+
+
+        container.innerHTML =
+            appData.certificates.map(certificate => `
+
+            <div class="certificate-card">
+
+                <div class="certificate-icon">
+
+                    ${certificate.icon}
+
+                </div>
+
+                <div>
+
+                    <h3>
+                        ${certificate.title}
+                    </h3>
+
+                    <p>
+                        Completed:
+                        ${certificate.date}
+                    </p>
+
+                    <small>
+                        Credential ID:
+                        ${certificate.credential}
+                    </small>
+
+                </div>
+
+                <button
+                    class="outline-btn view-certificate"
+                >
+                    View
+                </button>
+
+            </div>
+
+            `).join("");
+
+    }
+
+
+    /* =====================================================
+       COURSE MODAL
+    ===================================================== */
+
+    function openCourse(courseId) {
+
+        const course =
+            appData.courses.find(course =>
+                course.id === Number(courseId)
+            );
+
+        if (!course) return;
+
+
+        modalBody.innerHTML = `
+
+            <div class="course-modal-header">
+
+                <div class="course-modal-icon">
+                    ${course.icon}
+                </div>
+
+                <div>
+
+                    <span class="course-category">
+                        ${course.category}
+                    </span>
+
+                    <h2>
+                        ${course.title}
+                    </h2>
+
+                    <p>
+                        Instructor:
+                        ${course.instructor}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-progress-section">
+
+                <div class="modal-progress-title">
+
+                    <span>Your Progress</span>
+
+                    <strong>
+                        ${course.progress}%
+                    </strong>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="
+                            width:${course.progress}%
+                        "
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="course-details-grid">
+
+                <div>
+
+                    ⏱
+
+                    <strong>
+                        ${course.duration}
+                    </strong>
+
+                    <span>Duration</span>
+
+                </div>
+
+                <div>
+
+                    📚
+
+                    <strong>
+                        ${course.lessons}
+                    </strong>
+
+                    <span>Lessons</span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="primary-btn modal-start-course"
+                data-course="${course.id}"
+            >
+
+                ${
+                    course.progress > 0
+                    ? "Continue Learning →"
+                    : "Start Course →"
+                }
+
+            </button>
+
+        `;
+
+
+        modal.classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       GLOBAL CLICK EVENTS
+    ===================================================== */
+
+    document.addEventListener("click", event => {
+
+        const courseButton =
+            event.target.closest(
+                ".open-course, .mini-continue, .enroll-course"
+            );
+
+
+        if (courseButton) {
+
+            openCourse(
+                courseButton.dataset.course
+            );
+
+        }
+
+
+        if (
+            event.target.closest(".resource-open")
+        ) {
+
+            showToast(
+                "Resource opened successfully 📚",
+                "success"
+            );
+
+        }
+
+
+        if (
+            event.target.closest(".view-certificate")
+        ) {
+
+            showToast(
+                "Certificate preview opened 🏆",
+                "success"
+            );
+
+        }
+
+
+        if (
+            event.target.closest(".modal-start-course")
+        ) {
+
+            const courseId =
+                event.target.dataset.course;
+
+
+            const course =
+                appData.courses.find(item =>
+                    item.id === Number(courseId)
+                );
+
+
+            if (course) {
+
+                course.progress =
+                    Math.min(
+                        course.progress + 10,
+                        100
+                    );
+
+
+                if (
+                    course.progress >= 100
+                ) {
+
+                    course.status =
+                        "completed";
+
+                } else {
+
+                    course.status =
+                        "in-progress";
+
+                }
+
+
+                renderDashboard();
+
+                renderLearningCourses();
+
+                modal.classList.remove("show");
+
+
+                showToast(
+                    `${course.title} progress updated! 🎉`
+                );
 
             }
 
@@ -821,24 +1657,369 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* =========================================
-       CONSOLE BRANDING 😎
-    ========================================= */
+    /* =====================================================
+       MODAL CLOSE
+    ===================================================== */
+
+    if (closeModal) {
+
+        closeModal.addEventListener(
+            "click",
+            () => {
+
+                modal.classList.remove("show");
+
+            }
+        );
+
+    }
+
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target.classList.contains(
+                        "modal-overlay"
+                    )
+                ) {
+
+                    modal.classList.remove("show");
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CONTINUE LEARNING
+    ===================================================== */
+
+    const continueLearning =
+        document.getElementById("continueLearning");
+
+
+    if (continueLearning) {
+
+        continueLearning.addEventListener(
+            "click",
+            () => {
+
+                navigateTo("learning");
+
+                showToast(
+                    "Pick up where you left off! 📚"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       BROWSE COURSES
+    ===================================================== */
+
+    const browseCoursesBtn =
+        document.getElementById(
+            "browseCoursesBtn"
+        );
+
+
+    if (browseCoursesBtn) {
+
+        browseCoursesBtn.addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "New courses coming soon! 🚀",
+                    "info"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SAVE PROFILE
+    ===================================================== */
+
+    const saveProfile =
+        document.getElementById("saveProfile");
+
+
+    if (saveProfile) {
+
+        saveProfile.addEventListener(
+            "click",
+            () => {
+
+                const name =
+                    document
+                        .getElementById("settingsName")
+                        .value
+                        .trim();
+
+
+                const email =
+                    document
+                        .getElementById("settingsEmail")
+                        .value
+                        .trim();
+
+
+                if (!name || !email) {
+
+                    showToast(
+                        "Please fill all fields",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                user.name = name;
+
+                user.email = email;
+
+
+                localStorage.setItem(
+                    "sakshamSetuUser",
+                    JSON.stringify(user)
+                );
+
+
+                updateUserInterface();
+
+
+                showToast(
+                    "Profile updated successfully! ✓"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CHANGE AVATAR
+    ===================================================== */
+
+    const changeAvatar =
+        document.getElementById("changeAvatar");
+
+
+    if (changeAvatar) {
+
+        changeAvatar.addEventListener(
+            "click",
+            () => {
+
+                const avatars = [
+                    "A",
+                    "🔥",
+                    "🚀",
+                    "🎓",
+                    "💡",
+                    "⭐"
+                ];
+
+
+                const randomAvatar =
+                    avatars[
+                        Math.floor(
+                            Math.random() *
+                            avatars.length
+                        )
+                    ];
+
+
+                document
+                    .getElementById("settingsAvatar")
+                    .textContent =
+                    randomAvatar;
+
+
+                document
+                    .getElementById("sidebarAvatar")
+                    .textContent =
+                    randomAvatar;
+
+
+                document
+                    .getElementById("topAvatar")
+                    .textContent =
+                    randomAvatar;
+
+
+                showToast(
+                    "Avatar changed! 😎"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            () => {
+
+                localStorage.removeItem(
+                    "sakshamSetuUser"
+                );
+
+
+                user = {
+
+                    name: "",
+                    email: "",
+                    role: "Learner"
+
+                };
+
+
+                app.classList.add("hidden");
+
+                app.classList.remove(
+                    "app-visible"
+                );
+
+
+                loginScreen.style.display =
+                    "flex";
+
+
+                setTimeout(() => {
+
+                    loginScreen.classList.remove(
+                        "login-hide"
+                    );
+
+                }, 50);
+
+
+                showToast(
+                    "Logged out successfully!"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       MOBILE SIDEBAR
+    ===================================================== */
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelector(".sidebar")
+                    ?.classList.toggle(
+                        "mobile-open"
+                    );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       NOTIFICATIONS
+    ===================================================== */
+
+    const notificationBtn =
+        document.getElementById(
+            "notificationBtn"
+        );
+
+
+    if (notificationBtn) {
+
+        notificationBtn.addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "🔔 You have 3 learning updates!",
+                    "info"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ESC KEY
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key === "Escape") {
+
+                if (modal) {
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       CONSOLE MESSAGE
+    ===================================================== */
 
     console.log(
         "%c SakshamSetu 🚀 ",
         `
-        background: #2563eb;
-        color: white;
-        padding: 10px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 5px;
+        background: linear-gradient(90deg,#2563eb,#7c3aed);
+        color:white;
+        padding:10px 20px;
+        font-size:16px;
+        font-weight:bold;
+        border-radius:8px;
         `
     );
 
     console.log(
-        "Empowering Skills. Connecting Futures."
+        "Smart Learning Platform Initialized Successfully!"
     );
 
 });
