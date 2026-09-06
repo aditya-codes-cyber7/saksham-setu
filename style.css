@@ -2473,3 +2473,881 @@ button {
     }
 
 }
+
+/* =====================================================
+   SAKSHAMSETU - FINAL JS COMPATIBILITY CSS
+   Paste this at the END of your existing style.css
+===================================================== */
+
+
+/* =====================================================
+   CUSTOM MODAL - MATCHES script.js
+===================================================== */
+
+.custom-modal {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 10000;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.custom-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* MODAL OVERLAY */
+
+.custom-modal .modal-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.72);
+
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
+}
+
+
+/* MODAL BOX */
+
+.custom-modal .modal-box {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(500px, 100%);
+
+    max-height: 85vh;
+
+    overflow-y: auto;
+
+    padding: 35px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 31, 52, 0.98),
+            rgba(7, 17, 31, 0.98)
+        );
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55);
+
+    transform:
+        scale(0.94)
+        translateY(20px);
+
+    transition:
+        transform 0.3s ease;
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+}
+
+.custom-modal.active .modal-box {
+    transform:
+        scale(1)
+        translateY(0);
+}
+
+
+/* MODAL HEADING */
+
+.custom-modal .modal-box > h2 {
+    margin-bottom: 10px;
+
+    font-family:
+        "Outfit",
+        sans-serif;
+
+    font-size: 26px;
+
+    color: var(--text);
+}
+
+
+/* CLOSE BUTTON */
+
+.close-modal {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border: none;
+
+    border-radius: 10px;
+
+    color: var(--text);
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    font-size: 25px;
+
+    transition:
+        0.25s ease;
+}
+
+.close-modal:hover {
+    background:
+        rgba(255, 101, 120, 0.15);
+
+    color:
+        var(--red);
+
+    transform:
+        rotate(90deg);
+}
+
+
+/* =====================================================
+   MODAL CONTENT
+===================================================== */
+
+.modal-description {
+    margin-bottom: 25px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* FORM INSIDE MODAL */
+
+.custom-modal form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+
+    margin-top: 25px;
+}
+
+.custom-modal input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    color: white;
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.09);
+
+    transition:
+        0.3s ease;
+}
+
+.custom-modal input::placeholder {
+    color:
+        #64748b;
+}
+
+.custom-modal input:focus {
+    border-color:
+        rgba(91, 140, 255, 0.8);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(91, 140, 255, 0.12);
+}
+
+
+/* MODAL BUTTON */
+
+.modal-btn {
+    width: 100%;
+
+    padding: 14px 20px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-weight: 600;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(91, 140, 255, 0.25);
+
+    transition:
+        0.3s ease;
+}
+
+.modal-btn:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(77, 227, 255, 0.25);
+}
+
+
+/* =====================================================
+   TOAST - MATCHES script.js
+===================================================== */
+
+.toast {
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 20000;
+
+    min-width: 260px;
+
+    padding: 14px 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    border-radius: 14px;
+
+    color: white;
+
+    background:
+        rgba(10, 24, 42, 0.92);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.1);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.35);
+
+    transform:
+        translateY(100px);
+
+    opacity: 0;
+
+    transition:
+        all 0.35s ease;
+}
+
+.toast.show {
+    transform:
+        translateY(0);
+
+    opacity: 1;
+}
+
+.toast span {
+    width: 27px;
+    height: 27px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.toast p {
+    margin: 0;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* SUCCESS TOAST */
+
+.toast.success {
+    border-color:
+        rgba(78, 230, 168, 0.25);
+}
+
+.toast.success span {
+    color:
+        #061c14;
+
+    background:
+        var(--green);
+}
+
+
+/* ERROR TOAST */
+
+.toast.error {
+    border-color:
+        rgba(255, 101, 120, 0.3);
+}
+
+.toast.error span {
+    color: white;
+
+    background:
+        var(--red);
+}
+
+
+/* INFO TOAST */
+
+.toast.info {
+    border-color:
+        rgba(77, 227, 255, 0.3);
+}
+
+.toast.info span {
+    color:
+        #061720;
+
+    background:
+        var(--cyan);
+}
+
+
+/* =====================================================
+   DASHBOARD MODAL
+===================================================== */
+
+.dashboard-modal {
+    margin-top: 25px;
+}
+
+
+/* PROFILE */
+
+.dash-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding-bottom: 22px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.dash-profile .avatar {
+    width: 55px;
+    height: 55px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--primary)
+        );
+}
+
+.dash-profile h3 {
+    font-family:
+        "Outfit",
+        sans-serif;
+
+    font-size: 18px;
+}
+
+.dash-profile p {
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    color:
+        var(--text-muted);
+}
+
+
+/* DASHBOARD STATS */
+
+.dash-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+    margin: 25px 0;
+}
+
+.dash-stats > div {
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    text-align: center;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    border:
+        1px solid var(--border);
+}
+
+.dash-stats strong {
+    font-size: 25px;
+
+    color:
+        var(--primary-light);
+}
+
+.dash-stats span {
+    font-size: 10px;
+
+    color:
+        var(--text-muted);
+}
+
+
+/* DASH PROGRESS */
+
+.dash-progress p {
+    margin-bottom: 10px;
+
+    font-size: 12px;
+
+    color:
+        var(--text-muted);
+}
+
+.dash-progress .progress-bar {
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+}
+
+.dash-progress .progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--cyan)
+        );
+
+    transition:
+        width 0.6s ease;
+}
+
+
+/* =====================================================
+   QUIZ SYSTEM
+===================================================== */
+
+.quiz-box {
+    margin-top: 20px;
+}
+
+.quiz-progress {
+    margin-bottom: 20px;
+
+    padding: 8px 12px;
+
+    display: inline-block;
+
+    border-radius: 20px;
+
+    color:
+        var(--cyan);
+
+    font-size: 10px;
+
+    background:
+        rgba(77, 227, 255, 0.08);
+}
+
+.quiz-box h3 {
+    margin-bottom: 22px;
+
+    font-size: 17px;
+
+    line-height: 1.5;
+}
+
+.quiz-options {
+    display: grid;
+
+    gap: 12px;
+}
+
+.quiz-option {
+    width: 100%;
+
+    padding: 15px;
+
+    text-align: left;
+
+    border-radius: 12px;
+
+    color:
+        var(--text);
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    border:
+        1px solid var(--border);
+
+    transition:
+        0.25s ease;
+}
+
+.quiz-option:hover {
+    transform:
+        translateX(5px);
+
+    border-color:
+        rgba(91, 140, 255, 0.5);
+
+    background:
+        rgba(91, 140, 255, 0.08);
+}
+
+.quiz-option.correct {
+    color:
+        var(--green);
+
+    border-color:
+        rgba(78, 230, 168, 0.6);
+
+    background:
+        rgba(78, 230, 168, 0.1);
+}
+
+.quiz-option.wrong {
+    color:
+        #ff8796;
+
+    border-color:
+        rgba(255, 101, 120, 0.6);
+
+    background:
+        rgba(255, 101, 120, 0.1);
+}
+
+
+/* =====================================================
+   ENROLL BUTTON - JS COMPATIBLE
+===================================================== */
+
+.enroll-btn {
+    padding: 9px 14px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    color: white;
+
+    font-size: 10px;
+
+    background:
+        rgba(91, 140, 255, 0.18);
+
+    transition:
+        0.25s ease;
+}
+
+.enroll-btn:hover {
+    background:
+        var(--primary);
+
+    transform:
+        translateY(-2px);
+}
+
+.enroll-btn:disabled {
+    cursor: default;
+
+    color:
+        #061c14;
+
+    background:
+        var(--green);
+}
+
+
+/* =====================================================
+   DASHBOARD BUTTON
+===================================================== */
+
+.dashboard-btn {
+    padding: 11px 18px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    color: white;
+
+    font-weight: 600;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #4773f5
+        );
+
+    transition:
+        0.3s ease;
+}
+
+.dashboard-btn:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(91, 140, 255, 0.25);
+}
+
+
+/* =====================================================
+   SCROLL REVEAL ANIMATION
+===================================================== */
+
+.reveal {
+    opacity: 0;
+
+    transform:
+        translateY(25px);
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+
+    transform:
+        translateY(0);
+}
+
+
+/* =====================================================
+   NAVBAR COMPATIBILITY
+===================================================== */
+
+.navbar {
+    transition:
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        backdrop-filter 0.3s ease;
+}
+
+.navbar.scrolled {
+    background:
+        rgba(3, 8, 20, 0.9);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 5px 25px
+        rgba(0, 0, 0, 0.2);
+}
+
+
+/* =====================================================
+   LOGIN / USER BUTTON COMPATIBILITY
+===================================================== */
+
+.btn-login {
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #4773f5
+        );
+
+    transition:
+        0.3s ease;
+}
+
+.btn-login:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(91, 140, 255, 0.3);
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background:
+        #030814;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+
+    background:
+        rgba(91, 140, 255, 0.45);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        var(--primary);
+}
+
+
+/* =====================================================
+   MODAL SCROLLBAR
+===================================================== */
+
+.custom-modal .modal-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-modal .modal-box::-webkit-scrollbar-thumb {
+    background:
+        rgba(91, 140, 255, 0.5);
+
+    border-radius: 10px;
+}
+
+
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+
+@media (max-width: 650px) {
+
+    .custom-modal {
+        padding: 15px;
+    }
+
+    .custom-modal .modal-box {
+        padding: 28px 20px;
+
+        border-radius: 20px;
+    }
+
+    .custom-modal .modal-box > h2 {
+        font-size: 22px;
+
+        padding-right: 35px;
+    }
+
+    .toast {
+        right: 15px;
+        left: 15px;
+        bottom: 15px;
+
+        min-width: unset;
+    }
+
+    .dash-stats {
+        gap: 10px;
+    }
+
+}
